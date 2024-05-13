@@ -157,3 +157,6 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
 if (file_exists("auto.txt")) {
     self.LoadTags("auto.txt");
 }
+if (file_exists("auto.png")) {
+    self.LoadImage("auto.png");
+}
