@@ -113,11 +113,23 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
         .SetID("NAME"),
     new EmuRenderSurface(c2, EMU_BASE, room_width - c2 - spacing * 2 - ew, room_height - spacing * 2, function(mx, my) {
         // render
+        var spr = obj_demo.image;
+        var w = obj_demo.cell_width;
+        var h = obj_demo.cell_height;
+        
         self.drawCheckerbox(0, 0);
+        
         matrix_set(matrix_world, matrix_build(-self.xoff, -self.yoff, 0, 0, 0, 0, self.zoom, self.zoom, 1));
-        if (sprite_exists(obj_demo.image)) {
-            draw_sprite(obj_demo.image, 0, 0, 0);
+        if (sprite_exists(spr)) {
+            draw_sprite(spr, 0, 0, 0);
+            for (var xx = 0; xx <= sprite_get_width(spr); xx += w) {
+                draw_line_colour(xx - 1, 0, xx - 1, sprite_get_height(spr) - 1, c_black, c_black);
+            }
+            for (var yy = 0; yy <= sprite_get_height(spr); yy += h) {
+                draw_line_colour(0, yy - 1, sprite_get_width(spr) - 1, yy - 1, c_black, c_black);
+            }
         }
+        
         matrix_set(matrix_world, matrix_build_identity());
     }, function(mx, my) {
         // step
