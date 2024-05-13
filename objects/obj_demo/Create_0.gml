@@ -9,13 +9,40 @@ self.tags = [
     "Deep Water"
 ];
 
+self.SaveTags = function(filename) {
+    var buffer = buffer_create(1000, buffer_grow, 1);
+    array_foreach(self.tags, method({ buffer }, function(tag) {
+        buffer_write(self.buffer, buffer_text, tag + "\n");
+    }));
+    buffer_save_ext(buffer, filename, 0, buffer_tell(buffer));
+    buffer_delete(buffer);
+};
+
+self.LoadTags = function(filename) {
+    var buffer = buffer_load(filename);
+    self.tags = string_split(buffer_read(buffer, buffer_text), "\n");
+    array_map_ext(self.tags, function(item) {
+        return string_trim(item);
+    });
+    buffer_delete(buffer);
+    self.container.GetChild("TAGS").ClearSelection();
+};
+
 self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
     new EmuText(c1, EMU_AUTO, ew, eh, "[c_aqua]Tile Terrain Tags"),
     new EmuButton(c1, EMU_AUTO, ew, eh, "Load Image", function() {
     }),
     new EmuButton(c1, EMU_AUTO, ew, eh, "Save Tags", function() {
+        var filename = get_save_filename("Text files|*.txt", "tags.txt");
+        if (filename != "") {
+            self.SaveTags(filename);
+        }
     }),
     new EmuButton(c1, EMU_AUTO, ew, eh, "Load Tags", function() {
+        var filename = get_save_filename("Text files|*.txt", "tags.txt");
+        if (file_exists(filename)) {
+            self.LoadTags(filename);
+        }
     }),
     new EmuButton(c1, EMU_AUTO, ew, eh, "Export Tag Data", function() {
     }),
