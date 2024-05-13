@@ -44,6 +44,15 @@ self.ResetCellData = function() {
     self.cell_values = array_create((sprite_get_width(self.image) div self.cell_width) * (sprite_get_height(self.image) div self.cell_height), 0);
 };
 
+self.ExportTags = function(filename) {
+    var buffer = buffer_create(1000, buffer_grow, 1);
+    array_foreach(self.cell_values, method({ buffer }, function(tag) {
+        buffer_write(self.buffer, buffer_u64, tag);
+    }));
+    buffer_save_ext(buffer, filename, 0, buffer_tell(buffer));
+    buffer_delete(buffer);
+};
+
 self.SaveTags = function(filename) {
     var buffer = buffer_create(1000, buffer_grow, 1);
     array_foreach(self.tags, method({ buffer }, function(tag) {
@@ -94,6 +103,10 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
         }
     }),
     new EmuButton(c1, EMU_AUTO, ew, eh, "Export Tag Data", function() {
+        var filename = get_save_filename("Terrain tag files|*.tag", "terrain.tag");
+        if (filename != "") {
+            obj_demo.ExportTags(filename);
+        }
     }),
     new EmuText(c1, EMU_AUTO, ew, eh, "Tile size:"),
     new EmuInput(c1, EMU_AUTO, ew / 2, eh, "", string(self.cell_width), "tile width", 3, E_InputTypes.INT, function() {
