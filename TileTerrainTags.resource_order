@@ -114,5 +114,6 @@
     {"name":"spr_emu_radio","order":3,"path":"sprites/spr_emu_radio/spr_emu_radio.yy",},
     {"name":"spr_emu_ring","order":8,"path":"sprites/spr_emu_ring/spr_emu_ring.yy",},
     {"name":"spr_emu_scroll_arrow","order":7,"path":"sprites/spr_emu_scroll_arrow/spr_emu_scroll_arrow.yy",},
+    {"name":"spr_highlight","order":4,"path":"sprites/spr_highlight/spr_highlight.yy",},
   ],
 }

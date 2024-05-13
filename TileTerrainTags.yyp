@@ -185,6 +185,7 @@
     {"id":{"name":"spr_emu_radio","path":"sprites/spr_emu_radio/spr_emu_radio.yy",},},
     {"id":{"name":"spr_emu_ring","path":"sprites/spr_emu_ring/spr_emu_ring.yy",},},
     {"id":{"name":"spr_emu_scroll_arrow","path":"sprites/spr_emu_scroll_arrow/spr_emu_scroll_arrow.yy",},},
+    {"id":{"name":"spr_highlight","path":"sprites/spr_highlight/spr_highlight.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",

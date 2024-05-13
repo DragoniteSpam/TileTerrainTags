@@ -13,10 +13,17 @@ self.tags = [
 self.image = undefined;
 self.cell_width = 32;
 self.cell_height = 32;
+self.cell = -1;
+
+self.SelectCell = function(x, y) {
+    if (!sprite_exists(self.image)) return;
+    self.cell = x + y * (sprite_get_width(self.image) div self.cell_width);
+};
 
 self.LoadImage = function(filename) {
     if (sprite_exists(self.image)) sprite_delete(self.image);
     self.image = sprite_add(filename, 0, false, false, 0, 0);
+    self.cell = -1;
 };
 
 self.SaveTags = function(filename) {
@@ -121,12 +128,47 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
         
         matrix_set(matrix_world, matrix_build(-self.xoff, -self.yoff, 0, 0, 0, 0, self.zoom, self.zoom, 1));
         if (sprite_exists(spr)) {
+            var sw = sprite_get_width(spr);
+            var sh = sprite_get_height(spr);
+            var hc = sw div w;
+            var vc = sh div h;
+            
             draw_sprite(spr, 0, 0, 0);
-            for (var xx = 0; xx <= sprite_get_width(spr); xx += w) {
-                draw_line_colour(xx - 1, 0, xx - 1, sprite_get_height(spr) - 1, c_black, c_black);
+            for (var xx = 0; xx <= sw; xx += w) {
+                draw_line_colour(xx - 1, 0, xx - 1, sh - 1, c_black, c_black);
             }
-            for (var yy = 0; yy <= sprite_get_height(spr); yy += h) {
-                draw_line_colour(0, yy - 1, sprite_get_width(spr) - 1, yy - 1, c_black, c_black);
+            for (var yy = 0; yy <= sh; yy += h) {
+                draw_line_colour(0, yy - 1, sw - 1, yy - 1, c_black, c_black);
+            }
+            
+            // deal with the highlighted cell
+            mx += self.xoff;
+            my += self.yoff;
+            mx /= self.zoom;
+            my /= self.zoom;
+            
+            var xc = mx div w;
+            var yc = my div h;
+            
+            if (xc >= 0 && yc >= 0 && xc < hc && yc < vc) {
+                if (mouse_check_button_pressed(mb_left)) {
+                    obj_demo.SelectCell(xc, yc);
+                }
+                
+                var x1 = xc * w;
+                var y1 = yc * h;
+                
+                draw_sprite_ext(spr_highlight, 0, x1, y1, 1, 1, 0, c_green, 1);
+            }
+            
+            // draw the currently-selected cell
+            if (obj_demo.cell != -1) {
+                xc = obj_demo.cell mod hc;
+                yc = obj_demo.cell div hc;
+                var x1 = xc * w;
+                var y1 = yc * h;
+                
+                draw_sprite_ext(spr_highlight, 0, x1, y1, 1, 1, 0, c_blue, 1);
             }
         }
         
