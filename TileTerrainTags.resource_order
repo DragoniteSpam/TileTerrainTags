@@ -1,6 +1,9 @@
 {
-  "FolderOrderSettings":[],
+  "FolderOrderSettings":[
+    {"name":"File Dropper","order":3,"path":"folders/File Dropper.yy",},
+  ],
   "ResourceOrderSettings":[
+    {"name":"FileDropper","order":3,"path":"extensions/FileDropper/FileDropper.yy",},
     {"name":"fnt_emu_default","order":16,"path":"fonts/fnt_emu_default/fnt_emu_default.yy",},
     {"name":"scribble_fallback_font","order":11,"path":"fonts/scribble_fallback_font/scribble_fallback_font.yy",},
     {"name":"readme_please","order":2,"path":"notes/readme_please/readme_please.yy",},
@@ -44,6 +47,8 @@
     {"name":"EmuTab","order":4,"path":"scripts/EmuTab/EmuTab.yy",},
     {"name":"EmuTabGroup","order":3,"path":"scripts/EmuTabGroup/EmuTabGroup.yy",},
     {"name":"EmuText","order":1,"path":"scripts/EmuText/EmuText.yy",},
+    {"name":"file_dropper_get_files","order":1,"path":"scripts/file_dropper_get_files/file_dropper_get_files.yy",},
+    {"name":"file_dropper_version","order":2,"path":"scripts/file_dropper_version/file_dropper_version.yy",},
     {"name":"scribble_anim_cycle","order":1,"path":"scripts/scribble_anim_cycle/scribble_anim_cycle.yy",},
     {"name":"scribble_anim_jitter","order":2,"path":"scripts/scribble_anim_jitter/scribble_anim_jitter.yy",},
     {"name":"scribble_anim_pulse","order":3,"path":"scripts/scribble_anim_pulse/scribble_anim_pulse.yy",},
