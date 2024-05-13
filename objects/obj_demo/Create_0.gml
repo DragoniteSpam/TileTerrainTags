@@ -170,6 +170,22 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
                 
                 draw_sprite_ext(spr_highlight, 0, x1, y1, 1, 1, 0, c_blue, 1);
             }
+            
+            static text_color = c_white;
+            static text_scale = 1 / 4;
+            static text_alpha = 0.4;
+            draw_set_halign(fa_center);
+            draw_set_valign(fa_middle);
+            draw_set_font(fnt_output);
+            
+            // draw the readouts
+            for (var i = 0; i < hc; i++) {
+                for (var j = 0; j < vc; j++) {
+                    var xx = i * w + w / 2;
+                    var yy = j * h + h / 2;
+                    draw_text_transformed_color(xx, yy, "0000", text_scale, text_scale, 0, text_color, text_color, text_color, text_color, text_alpha);
+                }
+            }
         }
         
         matrix_set(matrix_world, matrix_build_identity());
@@ -214,3 +230,10 @@ if (file_exists("auto.txt")) {
 if (file_exists("auto.png")) {
     self.LoadImage("auto.png");
 }
+
+font_enable_effects(fnt_output, true, {
+    outlineEnable: true,
+    outlineDistance: 4,
+    outlineColour: c_black,
+    outlineAlpha: 1
+});

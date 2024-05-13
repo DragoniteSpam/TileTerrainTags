@@ -64,6 +64,7 @@
   "resources":[
     {"id":{"name":"FileDropper","path":"extensions/FileDropper/FileDropper.yy",},},
     {"id":{"name":"fnt_emu_default","path":"fonts/fnt_emu_default/fnt_emu_default.yy",},},
+    {"id":{"name":"fnt_output","path":"fonts/fnt_output/fnt_output.yy",},},
     {"id":{"name":"scribble_fallback_font","path":"fonts/scribble_fallback_font/scribble_fallback_font.yy",},},
     {"id":{"name":"readme_please","path":"notes/readme_please/readme_please.yy",},},
     {"id":{"name":"obj_demo","path":"objects/obj_demo/obj_demo.yy",},},

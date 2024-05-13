@@ -5,6 +5,7 @@
   "ResourceOrderSettings":[
     {"name":"FileDropper","order":3,"path":"extensions/FileDropper/FileDropper.yy",},
     {"name":"fnt_emu_default","order":16,"path":"fonts/fnt_emu_default/fnt_emu_default.yy",},
+    {"name":"fnt_output","order":5,"path":"fonts/fnt_output/fnt_output.yy",},
     {"name":"scribble_fallback_font","order":11,"path":"fonts/scribble_fallback_font/scribble_fallback_font.yy",},
     {"name":"readme_please","order":2,"path":"notes/readme_please/readme_please.yy",},
     {"name":"obj_demo","order":2,"path":"objects/obj_demo/obj_demo.yy",},
