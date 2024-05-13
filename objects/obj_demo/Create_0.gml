@@ -25,6 +25,7 @@ self.LoadTags = function(filename) {
         return string_trim(item);
     });
     buffer_delete(buffer);
+    self.container.GetChild("TAGS").SetList(self.tags);
     self.container.GetChild("TAGS").ClearSelection();
 };
 
@@ -88,3 +89,7 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
         })
         .SetID("NAME"),
 ]);
+
+if (file_exists("auto.txt")) {
+    self.LoadTags("auto.txt");
+}

@@ -1,0 +1,1 @@
+self.SaveTags("auto.txt");
