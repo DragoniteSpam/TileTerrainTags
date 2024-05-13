@@ -111,14 +111,46 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
             self.SetInteractive(array_length(obj_demo.tags) > 0 && has_selection);
         })
         .SetID("NAME"),
-    new EmuRenderSurface(c2, EMU_BASE, room_width - c2 - spacing, room_height - spacing * 2, function(mx, my) {
+    new EmuRenderSurface(c2, EMU_BASE, room_width - c2 - spacing * 2 - ew, room_height - spacing * 2, function(mx, my) {
         // render
         self.drawCheckerbox(0, 0);
+        matrix_set(matrix_world, matrix_build(-self.xoff, -self.yoff, 0, 0, 0, 0, self.zoom, self.zoom, 1));
         if (sprite_exists(obj_demo.image)) {
             draw_sprite(obj_demo.image, 0, 0, 0);
         }
+        matrix_set(matrix_world, matrix_build_identity());
     }, function(mx, my) {
         // step
+        static scroll_step = 16;
+        static zoom_step = 0.125;
+        var scroll_value = scroll_step * self.zoom;
+        if (mouse_wheel_up()) {
+            if (keyboard_check(vk_shift)) {
+                self.xoff -= scroll_value;
+            } else if (keyboard_check(vk_control)) {
+                self.zoom = min(4, self.zoom + zoom_step);
+            } else {
+                self.yoff -= scroll_value;
+            }
+        }
+        if (mouse_wheel_down()) {
+            if (keyboard_check(vk_shift)) {
+                self.xoff += scroll_value;
+            } else if (keyboard_check(vk_control)) {
+                self.zoom = max(1, self.zoom - zoom_step);
+            } else {
+                self.yoff += scroll_value;
+            }
+        }
+        if (keyboard_check(vk_tab)) {
+            self.xoff = 0;
+            self.yoff = 0;
+            self.zoom = 1;
+        }
+    }, function() {
+        self.xoff = 0;
+        self.yoff = 0;
+        self.zoom = 1;
     })
 ]);
 
