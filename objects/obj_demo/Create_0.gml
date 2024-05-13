@@ -9,6 +9,10 @@ self.tags = [
     "Deep Water"
 ];
 
+self.image = undefined;
+self.cell_width = 32;
+self.cell_height = 32;
+
 self.SaveTags = function(filename) {
     var buffer = buffer_create(1000, buffer_grow, 1);
     array_foreach(self.tags, method({ buffer }, function(tag) {
@@ -47,7 +51,16 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
     }),
     new EmuButton(c1, EMU_AUTO, ew, eh, "Export Tag Data", function() {
     }),
-    new EmuList(c1, EMU_AUTO, ew, eh, "Tags:", eh, 12, function() {
+    new EmuText(c1, EMU_AUTO, ew, eh, "Tile size:"),
+    new EmuInput(c1, EMU_AUTO, ew / 2, eh, "", string(self.cell_width), "tile width", 3, E_InputTypes.INT, function() {
+        obj_demo.cell_width = real(self.value);
+    })
+        .SetInputBoxPosition(0, 0),
+    new EmuInput(c1 + ew / 2, EMU_INLINE, ew / 2, eh, "", string(self.cell_width), "tile height", 3, E_InputTypes.INT, function() {
+        obj_demo.cell_height= real(self.value);
+    })
+        .SetInputBoxPosition(0, 0),
+    new EmuList(c1, EMU_AUTO, ew, eh, "Tags:", eh, 10, function() {
         var selection = self.GetSelection();
         if (selection != -1) {
             self.GetSibling("NAME").SetValue(obj_demo.tags[selection]);
