@@ -14,16 +14,34 @@ self.image = undefined;
 self.cell_width = 32;
 self.cell_height = 32;
 self.cell = -1;
+self.cell_values = [];
 
 self.SelectCell = function(x, y) {
     if (!sprite_exists(self.image)) return;
     self.cell = x + y * (sprite_get_width(self.image) div self.cell_width);
 };
 
+self.GetCellIndex = function(x, y) {
+    return x + y * (sprite_get_width(self.image) div self.cell_width);
+};
+
+self.GetCellValue = function(x, y) {
+    return self.cell_values[x + y * (sprite_get_width(self.image) div self.cell_width)];
+};
+
+self.SetCellValue = function(x, y, value) {
+    self.cell_values[x + y * (sprite_get_width(self.image) div self.cell_width)] = value;
+};
+
 self.LoadImage = function(filename) {
     if (sprite_exists(self.image)) sprite_delete(self.image);
     self.image = sprite_add(filename, 0, false, false, 0, 0);
     self.cell = -1;
+    self.ResetCellData();
+};
+
+self.ResetCellData = function() {
+    self.cell_values = array_create((sprite_get_width(self.image) div self.cell_width) * (sprite_get_height(self.image) div self.cell_height), 0);
 };
 
 self.SaveTags = function(filename) {
@@ -44,6 +62,15 @@ self.LoadTags = function(filename) {
     buffer_delete(buffer);
     self.container.GetChild("TAGS").SetList(self.tags);
     self.container.GetChild("TAGS").ClearSelection();
+};
+
+self.Hexify = function(value) {
+    if (value == 0) return "0";
+    var hex = string(ptr(value));
+    while (string_starts_with(hex, "0") && string_length(hex) > 1) {
+        hex = string_copy(hex, 2, string_length(hex) - 1);
+    }
+    return hex;
 };
 
 self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
@@ -71,11 +98,15 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
     new EmuText(c1, EMU_AUTO, ew, eh, "Tile size:"),
     new EmuInput(c1, EMU_AUTO, ew / 2, eh, "", string(self.cell_width), "tile width", 3, E_InputTypes.INT, function() {
         obj_demo.cell_width = real(self.value);
+        self.ResetCellData();
     })
+        .SetRequireConfirm(true)
         .SetInputBoxPosition(0, 0),
     new EmuInput(c1 + ew / 2, EMU_INLINE, ew / 2, eh, "", string(self.cell_width), "tile height", 3, E_InputTypes.INT, function() {
         obj_demo.cell_height= real(self.value);
+        self.ResetCellData();
     })
+        .SetRequireConfirm(true)
         .SetInputBoxPosition(0, 0),
     new EmuList(c1, EMU_AUTO, ew, eh, "Tags:", eh, 10, function() {
         var selection = self.GetSelection();
@@ -183,7 +214,7 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
                 for (var j = 0; j < vc; j++) {
                     var xx = i * w + w / 2;
                     var yy = j * h + h / 2;
-                    draw_text_transformed_color(xx, yy, "0000", text_scale, text_scale, 0, text_color, text_color, text_color, text_color, text_alpha);
+                    draw_text_transformed_color(xx, yy, obj_demo.Hexify(obj_demo.GetCellValue(i, j)), text_scale, text_scale, 0, text_color, text_color, text_color, text_color, text_alpha);
                 }
             }
         }
