@@ -2,6 +2,7 @@ var ew = 320;
 var eh = 32;
 var spacing = 32;
 var c1 = spacing;
+var c2 = c1 + ew + spacing;
 
 self.tags = [
     "Solid",
@@ -12,6 +13,11 @@ self.tags = [
 self.image = undefined;
 self.cell_width = 32;
 self.cell_height = 32;
+
+self.LoadImage = function(filename) {
+    if (sprite_exists(self.image)) sprite_delete(self.image);
+    self.image = sprite_add(filename, 0, false, false, 0, 0);
+};
 
 self.SaveTags = function(filename) {
     var buffer = buffer_create(1000, buffer_grow, 1);
@@ -36,6 +42,10 @@ self.LoadTags = function(filename) {
 self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
     new EmuText(c1, EMU_AUTO, ew, eh, "[c_aqua]Tile Terrain Tags"),
     new EmuButton(c1, EMU_AUTO, ew, eh, "Load Image", function() {
+        var filename = get_open_filename("Image files|*.png", "tileset.png");
+        if (file_exists(filename)) {
+            obj_demo.LoadImage(filename);
+        }
     }),
     new EmuButton(c1, EMU_AUTO, ew, eh, "Save Tags", function() {
         var filename = get_save_filename("Text files|*.txt", "tags.txt");
@@ -101,6 +111,15 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
             self.SetInteractive(array_length(obj_demo.tags) > 0 && has_selection);
         })
         .SetID("NAME"),
+    new EmuRenderSurface(c2, EMU_BASE, room_width - c2 - spacing, room_height - spacing * 2, function(mx, my) {
+        // render
+        self.drawCheckerbox(0, 0);
+        if (sprite_exists(obj_demo.image)) {
+            draw_sprite(obj_demo.image, 0, 0, 0);
+        }
+    }, function(mx, my) {
+        // step
+    })
 ]);
 
 if (file_exists("auto.txt")) {
