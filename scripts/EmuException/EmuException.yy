@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"EmuException",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EmuException",
+  "parent":{
+    "name":"Core",
+    "path":"folders/Emu/Core.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

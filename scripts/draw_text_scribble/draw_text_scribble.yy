@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"draw_text_scribble",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"draw_text_scribble",
+  "parent":{
+    "name":"Miscellaneous",
+    "path":"folders/Scribble/Miscellaneous.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
