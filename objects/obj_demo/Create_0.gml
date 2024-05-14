@@ -81,6 +81,16 @@ self.ExportTags = function(filename) {
     buffer_delete(buffer);
 };
 
+self.ImportTags = function(filename) {
+    var buffer = buffer_load(filename);
+    
+    for (var i = 0, n = min(array_length(self.cell_values), buffer_get_size(buffer) / buffer_sizeof(buffer_u64)); i < n; i++) {
+        self.cell_values[i] = buffer_read(buffer, buffer_u64);
+    }
+    
+    buffer_delete(buffer);
+};
+
 self.SaveTags = function(filename) {
     var buffer = buffer_create(1000, buffer_grow, 1);
     array_foreach(self.tags, method({ buffer }, function(tag) {
@@ -325,6 +335,9 @@ if (file_exists("auto.txt")) {
 }
 if (file_exists("auto.png")) {
     self.LoadImage("auto.png");
+}
+if (file_exists("auto.tag")) {
+    self.ImportTags("auto.tag");
 }
 
 font_enable_effects(fnt_output, true, {
