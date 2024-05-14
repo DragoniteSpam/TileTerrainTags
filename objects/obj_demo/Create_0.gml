@@ -3,6 +3,7 @@ var eh = 32;
 var spacing = 32;
 var c1 = spacing;
 var c2 = c1 + ew + spacing;
+var c3 = room_width - spacing - ew;
 
 self.tags = [
     "Solid",
@@ -16,6 +17,8 @@ self.cell_height = 32;
 self.cell = -1;
 self.cell_values = [];
 
+self.cell_copy_mask = -1;
+
 self.SelectCell = function(x, y) {
     if (!sprite_exists(self.image)) return;
     self.cell = x + y * (sprite_get_width(self.image) div self.cell_width);
@@ -23,6 +26,14 @@ self.SelectCell = function(x, y) {
 
 self.GetCellIndex = function(x, y) {
     return x + y * (sprite_get_width(self.image) div self.cell_width);
+};
+
+self.GetSelectedCellValue = function() {
+    return self.cell_values[self.cell];
+};
+
+self.SetSelectedCellValue = function(value) {
+    self.cell_values[self.cell] = value;
 };
 
 self.GetCellValue = function(x, y) {
@@ -265,7 +276,51 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
         self.xoff = 0;
         self.yoff = 0;
         self.zoom = 1;
+    }),
+    new EmuText(c3, EMU_BASE, ew, eh, "Select a tile...")
+        .SetUpdate(function() {
+            if (obj_demo.cell == -1 || !sprite_exists(obj_demo.image)) {
+                self.text = "Select a tile...";
+            } else {
+                var hc = sprite_get_width(obj_demo.image) div obj_demo.cell_width;
+                var vc = sprite_get_height(obj_demo.image) div obj_demo.cell_height;
+                self.text = $"Data for Tile {obj_demo.cell} ({obj_demo.cell mod hc}, {obj_demo.cell div hc})";
+            }
+        }),
+    new EmuText(c3, EMU_AUTO, ew, eh, "Mask: n/a")
+        .SetUpdate(function() {
+            if (obj_demo.cell == -1 || !sprite_exists(obj_demo.image)) {
+                self.text = "Mask: n/a";
+            } else {
+                var value = obj_demo.GetSelectedCellValue();
+                self.text = $"Mask: {value == 0 ? "0" : string(ptr(value))}";
+            }
+        }),
+    new EmuList(c3, EMU_AUTO, ew, eh, "Values:", eh, 18, function() {
+        var mask = array_reduce(self.GetAllSelectedItems(), function(previous, value) {
+            return previous | power(2, array_get_index(obj_demo.tags, value));
+        }, 0);
+        obj_demo.SetSelectedCellValue(mask);
     })
+        .SetUpdate(function() {
+            self.SetInteractive(obj_demo.cell != -1 && sprite_exists(obj_demo.image));
+        })
+        .SetList(self.tags)
+        .SetID("CELL")
+        .SetMultiSelect(true, true, false),
+    new EmuButton(c3, EMU_AUTO, ew, eh, "Copy mask", function() {
+        obj_demo.cell_copy_mask = obj_demo.GetSelectedCellValue();
+    })
+        .SetUpdate(function() {
+            self.SetInteractive(obj_demo.cell != -1 && sprite_exists(obj_demo.image));
+        }),
+    new EmuButton(c3, EMU_AUTO, ew, eh, "Paste mask", function() {
+        if (obj_demo.cell_copy_mask == -1) return;
+        obj_demo.SetSelectedCellValue(obj_demo.cell_copy_mask);
+    })
+        .SetUpdate(function() {
+            self.SetInteractive(obj_demo.cell != -1 && sprite_exists(obj_demo.image));
+        })
 ]);
 
 if (file_exists("auto.txt")) {
