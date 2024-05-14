@@ -5,11 +5,10 @@ var c1 = spacing;
 var c2 = c1 + ew + spacing;
 var c3 = room_width - spacing - ew;
 
-self.tags = [
-    "Solid",
-    "Shallow Water",
-    "Deep Water"
-];
+self.tags = array_create(63);
+self.tags[0] = "Solid";
+self.tags[1] = "Shallow Water";
+self.tags[2] = "Deep Water";
 
 self.image = undefined;
 self.cell_width = 32;
@@ -93,12 +92,14 @@ self.SaveTags = function(filename) {
 
 self.LoadTags = function(filename) {
     var buffer = buffer_load(filename);
-    self.tags = string_split(buffer_read(buffer, buffer_text), "\n");
-    array_map_ext(self.tags, function(item) {
-        return string_trim(item);
+    array_map_ext(self.tags, function() {
+        return "";
     });
+    var new_tags = string_split(buffer_read(buffer, buffer_text), "\n");
+    for (var i = 0, n = min(array_length(new_tags), array_length(obj_demo.tags)); i < n; i++) {
+        obj_demo.tags[i] = new_tags[i];
+    }
     buffer_delete(buffer);
-    self.container.GetChild("TAGS").SetList(self.tags);
     self.container.GetChild("TAGS").ClearSelection();
 };
 
@@ -150,7 +151,7 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
     })
         .SetRequireConfirm(true)
         .SetInputBoxPosition(0, 0),
-    new EmuList(c1, EMU_AUTO, ew, eh, "Tags:", eh, 10, function() {
+    new EmuList(c1, EMU_AUTO, ew, eh, "Tags:", eh, 12, function() {
         var selection = self.GetSelection();
         if (selection != -1) {
             self.GetSibling("NAME").SetValue(obj_demo.tags[selection]);
@@ -158,29 +159,6 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
     })
         .SetList(self.tags)
         .SetID("TAGS"),
-    new EmuButton(c1, EMU_AUTO, ew, eh, "Add Tag", function() {
-        array_push(obj_demo.tags, $"Tag{array_length(obj_demo.tags)}");
-        if (self.GetSibling("TAGS").GetSelection() == -1) {
-            self.GetSibling("TAGS").Select(array_length(obj_demo.tags) - 1);
-        }
-    })
-        .SetUpdate(function() {
-            self.SetInteractive(array_length(obj_demo.tags) < 62);
-        }),
-    new EmuButton(c1, EMU_AUTO, ew, eh, "Delete Tag", function() {
-        var tag_list = self.GetSibling("TAGS");
-        var selection = tag_list.GetSelection();
-        array_delete(obj_demo.tags, selection, 1);
-        if (selection < array_length(obj_demo.tags)) {
-            tag_list.Select(selection);
-        } else {
-            tag_list.ClearSelection();
-        }
-    })
-        .SetUpdate(function() {
-            var has_selection = self.GetSibling("TAGS").GetSelection() != -1;
-            self.SetInteractive(array_length(obj_demo.tags) > 0 && has_selection);
-        }),
     new EmuInput(c1, EMU_AUTO, ew, eh, "Name:", "", "Terrain tag name", 32, E_InputTypes.STRING, function() {
         var selection = self.GetSibling("TAGS").GetSelection();
         obj_demo.tags[selection] = self.value;
@@ -325,7 +303,7 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
         })
         .SetList(self.tags)
         .SetID("CELL")
-        .SetMultiSelect(true, true, false),
+        .SetMultiSelect(true, true, true, true),
     new EmuButton(c3, EMU_AUTO, ew, eh, "Copy mask", function() {
         obj_demo.CopyCellMask();
     })
