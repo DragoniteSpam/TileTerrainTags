@@ -29,10 +29,12 @@ self.GetCellIndex = function(x, y) {
 };
 
 self.GetSelectedCellValue = function() {
+    if (self.cell == -1) return 0;
     return self.cell_values[self.cell];
 };
 
 self.SetSelectedCellValue = function(value) {
+    if (self.cell == -1) return;
     self.cell_values[self.cell] = value;
 };
 
@@ -42,6 +44,22 @@ self.GetCellValue = function(x, y) {
 
 self.SetCellValue = function(x, y, value) {
     self.cell_values[x + y * (sprite_get_width(self.image) div self.cell_width)] = value;
+};
+
+self.CopyCellMask = function() {
+    if (self.cell == -1) return;
+    self.cell_copy_mask = self.GetSelectedCellValue();
+};
+
+self.PasteCellMask = function() {
+    if (self.cell == -1) return;
+    if (self.cell_copy_mask == -1) return;
+    self.SetSelectedCellValue(self.cell_copy_mask);
+};
+
+self.ResetCellMask = function() {
+    if (self.cell == -1) return;
+    self.SetSelectedCellValue(0);
 };
 
 self.LoadImage = function(filename) {
@@ -309,14 +327,13 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
         .SetID("CELL")
         .SetMultiSelect(true, true, false),
     new EmuButton(c3, EMU_AUTO, ew, eh, "Copy mask", function() {
-        obj_demo.cell_copy_mask = obj_demo.GetSelectedCellValue();
+        obj_demo.CopyCellMask();
     })
         .SetUpdate(function() {
             self.SetInteractive(obj_demo.cell != -1 && sprite_exists(obj_demo.image));
         }),
     new EmuButton(c3, EMU_AUTO, ew, eh, "Paste mask", function() {
-        if (obj_demo.cell_copy_mask == -1) return;
-        obj_demo.SetSelectedCellValue(obj_demo.cell_copy_mask);
+        obj_demo.PasteCellMask();
     })
         .SetUpdate(function() {
             self.SetInteractive(obj_demo.cell != -1 && sprite_exists(obj_demo.image));
