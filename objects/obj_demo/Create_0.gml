@@ -157,6 +157,7 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
             self.GetSibling("NAME").SetValue(obj_demo.tags[selection]);
         }
     })
+        .SetNumbered(true)
         .SetList(self.tags)
         .SetID("TAGS"),
     new EmuInput(c1, EMU_AUTO, ew, eh, "Name:", "", "Terrain tag name", 32, E_InputTypes.STRING, function() {
@@ -298,6 +299,7 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
         }, 0);
         obj_demo.SetSelectedCellValue(mask);
     })
+        .SetNumbered(true)
         .SetUpdate(function() {
             self.SetInteractive(obj_demo.cell != -1 && sprite_exists(obj_demo.image));
         })
