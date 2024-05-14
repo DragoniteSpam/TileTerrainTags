@@ -50,10 +50,11 @@ function EmuList(x, y, width, header_height, text, element_height, content_slots
         return self;
     };
     
-    self.SetMultiSelect = function(multi_select, auto, toggle) {
+    self.SetMultiSelect = function(multi_select, auto, toggle, allow_deselect) {
         self.allow_multi_select = multi_select;
         self.auto_multi_select = auto;
         self.select_toggle = toggle;
+        self.allow_deselect = allow_deselect;
         return self;
     };
     
@@ -192,7 +193,7 @@ function EmuList(x, y, width, header_height, text, element_height, content_slots
     };
     
     self.Deselect = function(list_index) {
-        self.DeselectNoCallback();
+        self.DeselectNoCallback(list_index);
         self.callback();
         return self;
     };
