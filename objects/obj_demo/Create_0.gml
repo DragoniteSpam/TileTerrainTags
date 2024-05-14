@@ -216,6 +216,10 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
                 if (mouse_check_button_pressed(mb_left)) {
                     obj_demo.SelectCell(xc, yc);
                 }
+                if (mouse_check_button_pressed(mb_right)) {
+                    obj_demo.SelectCell(xc, yc);
+                    obj_demo.PasteCellMask();
+                }
                 
                 var x1 = xc * w;
                 var y1 = yc * h;
