@@ -21,6 +21,9 @@ self.cell_copy_mask = -1;
 self.SelectCell = function(x, y) {
     if (!sprite_exists(self.image)) return;
     self.cell = x + y * (sprite_get_width(self.image) div self.cell_width);
+    self.container.GetChild("CELL")
+        .SetInteractive(true)
+        .Refresh();
 };
 
 self.GetCellIndex = function(x, y) {
@@ -54,6 +57,9 @@ self.PasteCellMask = function() {
     if (self.cell == -1) return;
     if (self.cell_copy_mask == -1) return;
     self.SetSelectedCellValue(self.cell_copy_mask);
+    self.container.GetChild("CELL")
+        .SetInteractive(true)
+        .Refresh();
 };
 
 self.ResetCellMask = function() {
@@ -316,6 +322,19 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
         .SetNumbered(true)
         .SetUpdate(function() {
             self.SetInteractive(obj_demo.cell != -1 && sprite_exists(obj_demo.image));
+        })
+        .SetRefresh(function() {
+            if (!self.interactive) return;
+            var value = obj_demo.GetSelectedCellValue();
+            self.ClearSelection();
+            var n = 0;
+            while (value != 0) {
+                if (value & 1 == 1) {
+                    self.Select(n);
+                }
+                n++;
+                value = value >> 1;
+            }
         })
         .SetList(self.tags)
         .SetID("CELL")
