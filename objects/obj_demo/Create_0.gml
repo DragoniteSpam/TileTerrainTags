@@ -350,6 +350,12 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
     })
         .SetUpdate(function() {
             self.SetInteractive(obj_demo.cell != -1 && sprite_exists(obj_demo.image));
+        }),
+    new EmuButton(c3, EMU_AUTO, ew, eh, "Clear mask", function() {
+        obj_demo.ResetCellMask();
+    })
+        .SetUpdate(function() {
+            self.SetInteractive(obj_demo.cell != -1 && sprite_exists(obj_demo.image));
         })
 ]);
 
