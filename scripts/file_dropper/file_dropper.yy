@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"file_dropper",
   "isCompatibility":false,
   "isDnD":false,
