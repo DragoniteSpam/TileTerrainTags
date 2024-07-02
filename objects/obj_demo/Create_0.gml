@@ -263,6 +263,8 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
         matrix_set(matrix_world, matrix_build_identity());
     }, function(mx, my) {
         // step
+        if (mx < 0 || my < 0 || mx >= self.width || my >= self.height) return;
+        
         static scroll_step = 16;
         static zoom_step = 0.125;
         var scroll_value = scroll_step * self.zoom;
