@@ -154,6 +154,12 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
             obj_demo.ExportTags(filename);
         }
     }),
+    new EmuButton(c1, EMU_AUTO, ew, eh, "Import Tag Data", function() {
+        var filename = get_open_filename("Terrain tag files|*.tag", "terrain.tag");
+        if (file_exists(filename)) {
+            obj_demo.ImportTags(filename);
+        }
+    }),
     new EmuText(c1, EMU_AUTO, ew, eh, "Tile size:"),
     new EmuInput(c1, EMU_AUTO, ew / 2, eh, "", string(self.cell_width), "tile width", 3, E_InputTypes.INT, function() {
         obj_demo.cell_width = real(self.value);
