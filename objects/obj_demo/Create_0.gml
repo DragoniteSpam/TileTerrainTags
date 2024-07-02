@@ -219,12 +219,14 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
             var yc = my div h;
             
             if (xc >= 0 && yc >= 0 && xc < hc && yc < vc) {
-                if (mouse_check_button_pressed(mb_left)) {
-                    obj_demo.SelectCell(xc, yc);
-                }
-                if (mouse_check_button_pressed(mb_right)) {
-                    obj_demo.SelectCell(xc, yc);
-                    obj_demo.PasteCellMask();
+                if (mx >= 0 && my >= 0 && mx < self.width && my < self.height) {
+                    if (mouse_check_button_pressed(mb_left)) {
+                        obj_demo.SelectCell(xc, yc);
+                    }
+                    if (mouse_check_button_pressed(mb_right)) {
+                        obj_demo.SelectCell(xc, yc);
+                        obj_demo.PasteCellMask();
+                    }
                 }
                 
                 var x1 = xc * w;
