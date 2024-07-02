@@ -139,13 +139,13 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
     new EmuButton(c1, EMU_AUTO, ew, eh, "Save Tags", function() {
         var filename = get_save_filename("Text files|*.txt", "tags.txt");
         if (filename != "") {
-            self.SaveTags(filename);
+            obj_demo.SaveTags(filename);
         }
     }),
     new EmuButton(c1, EMU_AUTO, ew, eh, "Load Tags", function() {
         var filename = get_save_filename("Text files|*.txt", "tags.txt");
         if (file_exists(filename)) {
-            self.LoadTags(filename);
+            obj_demo.LoadTags(filename);
         }
     }),
     new EmuButton(c1, EMU_AUTO, ew, eh, "Export Tag Data", function() {
