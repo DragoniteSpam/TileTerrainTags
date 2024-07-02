@@ -148,16 +148,16 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
             obj_demo.LoadTags(filename);
         }
     }),
-    new EmuButton(c1, EMU_AUTO, ew, eh, "Export Tag Data", function() {
-        var filename = get_save_filename("Terrain tag files|*.tag", "terrain.tag");
-        if (filename != "") {
-            obj_demo.ExportTags(filename);
-        }
-    }),
     new EmuButton(c1, EMU_AUTO, ew, eh, "Import Tag Data", function() {
         var filename = get_open_filename("Terrain tag files|*.tag", "terrain.tag");
         if (file_exists(filename)) {
             obj_demo.ImportTags(filename);
+        }
+    }),
+    new EmuButton(c1, EMU_AUTO, ew, eh, "Export Tag Data", function() {
+        var filename = get_save_filename("Terrain tag files|*.tag", "terrain.tag");
+        if (filename != "") {
+            obj_demo.ExportTags(filename);
         }
     }),
     new EmuText(c1, EMU_AUTO, ew, eh, "Tile size:"),
