@@ -5,7 +5,7 @@ var c1 = spacing;
 var c2 = c1 + ew + spacing;
 var c3 = room_width - spacing - ew;
 
-self.tags = array_create(63);
+self.tags = array_create(63, "");
 self.tags[0] = "Solid";
 self.tags[1] = "Shallow Water";
 self.tags[2] = "Deep Water";
