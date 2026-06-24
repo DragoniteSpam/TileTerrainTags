@@ -238,7 +238,7 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
                 var x1 = xc * w;
                 var y1 = yc * h;
                 
-                draw_sprite_ext(spr_highlight, 0, x1, y1, 1, 1, 0, c_green, 1);
+                draw_sprite_stretched_ext(spr_highlight, 0, x1, y1, w, h, c_green, 1);
             }
             
             // draw the currently-selected cell
@@ -248,7 +248,7 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
                 var x1 = xc * w;
                 var y1 = yc * h;
                 
-                draw_sprite_ext(spr_highlight, 0, x1, y1, 1, 1, 0, c_blue, 1);
+                draw_sprite_stretched_ext(spr_highlight, 0, x1, y1, w, h, c_blue, 1);
             }
             
             static text_color = c_white;
