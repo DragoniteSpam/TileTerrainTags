@@ -15,6 +15,7 @@ self.cell_width = 32;
 self.cell_height = 32;
 self.cell = -1;
 self.cell_values = [];
+self.last_file_name = "";
 
 self.cell_copy_mask = -1;
 
@@ -71,11 +72,35 @@ self.LoadImage = function(filename) {
     if (sprite_exists(self.image)) sprite_delete(self.image);
     self.image = sprite_add(filename, 0, false, false, 0, 0);
     self.cell = -1;
-    self.ResetCellData();
+    if (filename != "auto.png") {
+        self.last_file_name = filename;
+    }
+    var path_hash = sha1_string_utf8(filename);
+    var w = 32;
+    var h = 32;
+    var location = path_hash;
+    if (file_exists(location)) {
+        var b = buffer_load(location);
+        w = buffer_read(b, buffer_u32);
+        h = buffer_read(b, buffer_u32);
+        buffer_delete(b);
+    }
+    self.ResetCellData(w, h);
 };
 
-self.ResetCellData = function() {
-    self.cell_values = array_create((sprite_get_width(self.image) div self.cell_width) * (sprite_get_height(self.image) div self.cell_height), 0);
+self.SaveImageMetadata = function(filename, destination) {
+    var b = buffer_create(10, buffer_grow, 1);
+    buffer_write(b, buffer_u32, self.cell_width);
+    buffer_write(b, buffer_u32, self.cell_height);
+    buffer_write(b, buffer_string, filename);
+    buffer_save_ext(b, destination, 0, buffer_tell(b));
+    buffer_delete(b);
+};
+
+self.ResetCellData = function(w = self.cell_width, h = self.cell_height) {
+    self.cell_width = w;
+    self.cell_height = h;
+    self.cell_values = array_create((sprite_get_width(self.image) div w) * (sprite_get_height(self.image) div h), 0);
 };
 
 self.ExportTags = function(filename) {
@@ -143,7 +168,7 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
         }
     }),
     new EmuButton(c1, EMU_AUTO, ew, eh, "Load Tags", function() {
-        var filename = get_save_filename("Text files|*.txt", "tags.txt");
+        var filename = get_open_filename("Text files|*.txt", "tags.txt");
         if (file_exists(filename)) {
             obj_demo.LoadTags(filename);
         }
@@ -369,6 +394,13 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
         })
 ]);
 
+// load the autosaved grid size first
+if (file_exists("auto")) {
+    var b = buffer_load("auto");
+    self.cell_width = buffer_read(b, buffer_u32);
+    self.cell_height = buffer_read(b, buffer_u32);
+    buffer_delete(b);
+}
 if (file_exists("auto.txt")) {
     self.LoadTags("auto.txt");
 }
