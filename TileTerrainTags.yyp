@@ -27,12 +27,14 @@
     {"$GMFolder":"","%Name":"Miscellaneous","folderPath":"folders/Scribble/Miscellaneous.yy","name":"Miscellaneous","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Superfonts","folderPath":"folders/Scribble/Superfonts.yy","name":"Superfonts","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
-  "ForcedPrefabProjectReferences":[],
+  "ForcedPrefabProjectReferences":[
+    {"link":"io.gamemaker.sdfshaders-1.0.0","name":"io.gamemaker.sdfshaders-1.0.0","path":"io.gamemaker.sdfshaders-1.0.0.yyp",},
+  ],
   "IncludedFiles":[],
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.1400.0.841",
+    "IDEVersion":"2026.0.0.16",
   },
   "name":"TileTerrainTags",
   "resources":[
