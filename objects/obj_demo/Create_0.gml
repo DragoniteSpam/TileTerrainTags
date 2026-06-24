@@ -163,13 +163,13 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
     new EmuText(c1, EMU_AUTO, ew, eh, "Tile size:"),
     new EmuInput(c1, EMU_AUTO, ew / 2, eh, "", string(self.cell_width), "tile width", 3, E_InputTypes.INT, function() {
         obj_demo.cell_width = real(self.value);
-        self.ResetCellData();
+        obj_demo.ResetCellData();
     })
         .SetRequireConfirm(true)
         .SetInputBoxPosition(0, 0),
     new EmuInput(c1 + ew / 2, EMU_INLINE, ew / 2, eh, "", string(self.cell_width), "tile height", 3, E_InputTypes.INT, function() {
         obj_demo.cell_height= real(self.value);
-        self.ResetCellData();
+        obj_demo.ResetCellData();
     })
         .SetRequireConfirm(true)
         .SetInputBoxPosition(0, 0),
