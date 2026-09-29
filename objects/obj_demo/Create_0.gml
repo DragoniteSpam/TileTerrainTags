@@ -119,6 +119,16 @@ self.ImportTags = function(filename) {
         self.cell_values[i] = buffer_read(buffer, buffer_u64);
     }
     
+    var old_size = array_length(self.cell_values);
+    
+    array_resize(self.cell_values, (sprite_get_width(self.image) div self.cell_width) * (sprite_get_height(self.image) div self.cell_height));
+    
+    if (array_length(self.cell_values) > old_size) {
+        array_map_ext(self.cell_values, function() {
+            return 0;
+        }, old_size, array_length(self.cell_values) - old_size);
+    }
+    
     buffer_delete(buffer);
 };
 
@@ -146,7 +156,7 @@ self.LoadTags = function(filename) {
 
 self.Hexify = function(value) {
     if (value == 0) return "0";
-    var hex = string(ptr(value));
+    var hex = string(base64_encode(value));
     while (string_starts_with(hex, "0") && string_length(hex) > 1) {
         hex = string_copy(hex, 2, string_length(hex) - 1);
     }
@@ -225,6 +235,11 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
         
         self.drawCheckerbox(0, 0);
         
+        var xc_hover = -1;
+        var yc_hover = -1;
+        var xc = -1;
+        var yc = -1;
+        
         matrix_set(matrix_world, matrix_build(-self.xoff, -self.yoff, 0, 0, 0, 0, self.zoom, self.zoom, 1));
         if (sprite_exists(spr)) {
             var sw = sprite_get_width(spr);
@@ -240,30 +255,30 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
                 draw_line_colour(0, yy - 1, sw - 1, yy - 1, c_black, c_black);
             }
             
-            // deal with the highlighted cell
-            mx += self.xoff;
-            my += self.yoff;
-            mx /= self.zoom;
-            my /= self.zoom;
-            
-            var xc = mx div w;
-            var yc = my div h;
-            
-            if (xc >= 0 && yc >= 0 && xc < hc && yc < vc) {
-                if (mx >= 0 && my >= 0 && mx < self.width && my < self.height) {
+            if (mx >= 0 && my >= 0 && mx < self.width && my < self.height) {
+                // deal with the highlighted cell
+                mx += self.xoff;
+                my += self.yoff;
+                mx /= self.zoom;
+                my /= self.zoom;
+                
+                xc_hover = mx div w;
+                yc_hover = my div h;
+                
+                if (xc_hover >= 0 && yc_hover >= 0 && xc_hover < hc && yc_hover < vc) {
                     if (mouse_check_button_pressed(mb_left)) {
-                        obj_demo.SelectCell(xc, yc);
+                        obj_demo.SelectCell(xc_hover, yc_hover);
                     }
                     if (mouse_check_button_pressed(mb_right)) {
-                        obj_demo.SelectCell(xc, yc);
+                        obj_demo.SelectCell(xc_hover, yc_hover);
                         obj_demo.PasteCellMask();
                     }
+                    
+                    var x1 = xc_hover * w;
+                    var y1 = yc_hover * h;
+                    
+                    draw_sprite_stretched_ext(spr_highlight, 0, x1, y1, w, h, c_green, 1);
                 }
-                
-                var x1 = xc * w;
-                var y1 = yc * h;
-                
-                draw_sprite_stretched_ext(spr_highlight, 0, x1, y1, w, h, c_green, 1);
             }
             
             // draw the currently-selected cell
@@ -276,9 +291,8 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
                 draw_sprite_stretched_ext(spr_highlight, 0, x1, y1, w, h, c_blue, 1);
             }
             
-            static text_color = c_white;
-            static text_scale = 1 / 4;
-            static text_alpha = 0.4;
+            static text_scale = 1 / 7;
+            static text_stride = 6;
             draw_set_halign(fa_center);
             draw_set_valign(fa_middle);
             draw_set_font(fnt_output);
@@ -288,7 +302,18 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
                 for (var j = 0; j < vc; j++) {
                     var xx = i * w + w / 2;
                     var yy = j * h + h / 2;
-                    draw_text_transformed_color(xx, yy, obj_demo.Hexify(obj_demo.GetCellValue(i, j)), text_scale, text_scale, 0, text_color, text_color, text_color, text_color, text_alpha);
+                    var text_color = (xc == i && yc == j) ? #3399ff : c_white;
+                    var text_alpha = ((xc == i && yc == j) || (xc_hover == i && yc_hover == j)) ? 0.9 : 0.55;
+                    var output = obj_demo.Hexify(obj_demo.GetCellValue(i, j));
+                    output = string_replace_all(output, "=", "");
+                    var output_with_line_breaks = "";
+                    for (var c = 0, n = string_byte_length(output); c < n; c++) {
+                        output_with_line_breaks += chr(string_byte_at(output, c));
+                        if ((c + 1) % text_stride == 0) {
+                            output_with_line_breaks += "\n";
+                        }
+                    }
+                    draw_text_transformed_color(xx, yy, output_with_line_breaks, text_scale, text_scale, 0, text_color, text_color, text_color, text_color, text_alpha);
                 }
             }
         }
