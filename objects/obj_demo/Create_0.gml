@@ -156,7 +156,7 @@ self.LoadTags = function(filename) {
 
 self.Hexify = function(value) {
     if (value == 0) return "0";
-    var hex = string(base64_encode(value));
+    var hex = string(ptr(value));
     while (string_starts_with(hex, "0") && string_length(hex) > 1) {
         hex = string_copy(hex, 2, string_length(hex) - 1);
     }
@@ -291,8 +291,6 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
                 draw_sprite_stretched_ext(spr_highlight, 0, x1, y1, w, h, c_blue, 1);
             }
             
-            static text_scale = 1 / 7;
-            static text_stride = 6;
             draw_set_halign(fa_center);
             draw_set_valign(fa_middle);
             draw_set_font(fnt_output);
@@ -305,11 +303,20 @@ self.container = new EmuCore(0, 0, room_width, room_height).AddContent([
                     var text_color = (xc == i && yc == j) ? #3399ff : c_white;
                     var text_alpha = ((xc == i && yc == j) || (xc_hover == i && yc_hover == j)) ? 0.9 : 0.55;
                     var output = obj_demo.Hexify(obj_demo.GetCellValue(i, j));
-                    output = string_replace_all(output, "=", "");
                     var output_with_line_breaks = "";
-                    for (var c = 0, n = string_byte_length(output); c < n; c++) {
-                        output_with_line_breaks += chr(string_byte_at(output, c));
-                        if ((c + 1) % text_stride == 0) {
+                    
+                    var text_scale = 1 / 4;
+                    var text_stride = 4;
+                    
+                    var len = string_length(output);
+                    if (len > 8) {
+                        text_scale = 1 / 6;
+                        text_stride = 6;
+                    }
+                    
+                    for (var c = 1; c <= len; c++) {
+                        output_with_line_breaks += string_char_at(output, c);
+                        if (c % text_stride == 0) {
                             output_with_line_breaks += "\n";
                         }
                     }
