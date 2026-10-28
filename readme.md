@@ -45,3 +45,9 @@ Now that IDE plugins are kind of a thing, I'll probably remake this as an IDE pl
 This isn't a difficult system to use, and it should only take like a minute of work to set it up. However, copying and pasting the above function into your project without thinking about it probably won't work. I will not provide personal assistance integrating this into your game ([unless you pay me](https://www.patreon.com/c/wizardragon)).
 
 I think most of you will have the common sense to do that, but any time I release an asset I get messages about stuff like this and I'm not going to lie, I expect better.
+
+# FAQ
+
+### Q: Was this 🚀⭐😊✨Vibecoded?🚀⭐😊✨
+
+A: Do not cite the deep magic to me, witch. I was there when it was written.
